@@ -78,6 +78,6 @@ def predict(data: InputData):
 
     except Exception as e:
         return {"error": str(e)}
-    except Exception as e:
-        return {"error": str(e)}
+    
+
 
