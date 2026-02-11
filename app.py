@@ -51,16 +51,33 @@ class InputData(BaseModel):
 @app.post("/predict")
 def predict(data: InputData):
     try:
-        # يحول البيانات لأسماء الأعمدة الأصلية بالملي
         df = pd.DataFrame([data.model_dump(by_alias=True)])
 
         prediction = model.predict(df)
         probability = model.predict_proba(df)
 
+        # Class mapping
+        class_mapping = {
+            0: "Arthritis",
+            1: "Asthma",
+            2: "Cancer",
+            3: "Diabetes",
+            4: "Healthy",
+            5: "Hypertension",
+            6: "Obesity"
+        }
+
+        predicted_id = int(prediction[0])
+        disease_name = class_mapping.get(predicted_id, "Unknown")
+
         return {
-            "prediction": str(prediction[0]),
-            "probability": float(probability[0].max())
+            "prediction": predicted_id,          # الرقم
+            "disease_name": disease_name,        # الاسم
+            "probability": float(probability[0].max())  # النسبة
         }
 
     except Exception as e:
         return {"error": str(e)}
+    except Exception as e:
+        return {"error": str(e)}
+
