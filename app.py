@@ -42,7 +42,6 @@ def predict(data: InputData):
     try:
         input_dict = data.dict()
 
-        # رجّع أسماء الأعمدة الأصلية بمسافات
         rename_map = {
             "Blood_Pressure": "Blood Pressure",
             "Oxygen_Saturation": "Oxygen Saturation",
@@ -62,9 +61,13 @@ def predict(data: InputData):
         probability = model.predict_proba(df)
 
         return {
-            "prediction": prediction[0],
+            "prediction": str(prediction[0]),
             "probability": float(probability[0].max())
         }
 
     except Exception as e:
+        return {"error": str(e)}
+
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
